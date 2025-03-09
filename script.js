@@ -7,6 +7,12 @@ window.onload = async () => {
     console.log(error);
     alert('Erro ao carregar informações');
   }
+
+  const nextButton = document.getElementById('next-button')
+  const backButton = document.getElementById('back-button')
+
+  nextButton.addEventListener('click', loadNextPage)
+  backButton.addEventListener('click', loadPreviousPage)
 };
 
 async function loadCharacters(url) {
@@ -20,7 +26,7 @@ async function loadCharacters(url) {
 
     responseJson.results.forEach((character) => {
       const card = document.createElement("div");
-      card.style.backgroundImage = `url('https://web.archive.org/web/20230325201650if_/https://starwars-visualguide.com/assets/img/characters/1.jpg')`;
+      card.style.backgroundImage = `url('https://web.archive.org/web/20230325201650if_/https://starwars-visualguide.com/assets/img/characters/${character.url.replace(/\D/g, "")}.jpg')`;
       card.className = "cards";
 
       const characterNameBG = document.createElement("div");
@@ -35,6 +41,14 @@ async function loadCharacters(url) {
 
       mainContent.appendChild(card);
     });
+
+    const nextButton = document.getElementById('next-button');
+    const backButton = document.getElementById('back-button')
+
+    nextButton.disabe = !responseJson.next
+    backButton.disabe = !responseJson.previous
+
+    backButton.style.visibility = responseJson.previous? "visible" : "hidden"
 
     currentPageUrl = url
 
