@@ -45,8 +45,8 @@ async function loadCharacters(url) {
     const nextButton = document.getElementById('next-button');
     const backButton = document.getElementById('back-button')
 
-    nextButton.disabe = !responseJson.next
-    backButton.disabe = !responseJson.previous
+    nextButton.disabled = !responseJson.next
+    backButton.disabled = !responseJson.previous
 
     backButton.style.visibility = responseJson.previous? "visible" : "hidden"
 
@@ -55,5 +55,35 @@ async function loadCharacters(url) {
   } catch (error) {
     alert('Erro ao carregar personagens')
     console.log(error)
+  }
+}
+
+async function loadNextPage(params) {
+  if (!currentPageUrl) return;
+
+  try {
+    const response = await fetch(currentPageUrl);
+    const responseJson = await response.json();
+
+    await loadCharacters(responseJson.next);
+
+  } catch (error) {
+    console.log(error);
+    alert('Erro ao carregar a próxima página');
+  }
+}
+
+async function loadPreviousPage(params) {
+  if (!currentPageUrl) return;
+
+  try {
+    const response = await fetch(currentPageUrl)
+    const responseJson = await response.json()
+
+    await loadCharacters(responseJson.previous)
+
+  } catch (error) {
+    console.log(error)
+    alert ('Erro ao carregar a página anterior')
   }
 }
