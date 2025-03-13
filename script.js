@@ -39,6 +39,11 @@ async function loadCharacters(url) {
       characterNameBG.appendChild(characterName);
       card.appendChild(characterNameBG);
 
+      card.onclick = () => {
+        const modal = document.getElementById('modal');
+        modal.style.visibility = 'visible';
+        };
+
       mainContent.appendChild(card);
     });
 
@@ -58,7 +63,7 @@ async function loadCharacters(url) {
   }
 }
 
-async function loadNextPage(params) {
+async function loadNextPage() {
   if (!currentPageUrl) return;
 
   try {
@@ -73,7 +78,7 @@ async function loadNextPage(params) {
   }
 }
 
-async function loadPreviousPage(params) {
+async function loadPreviousPage() {
   if (!currentPageUrl) return;
 
   try {
@@ -86,4 +91,9 @@ async function loadPreviousPage(params) {
     console.log(error)
     alert ('Erro ao carregar a página anterior')
   }
+}
+
+function hideModal() {
+  const modal = document.getElementById('modal');
+  modal.style.display = 'hidden';
 }
