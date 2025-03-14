@@ -39,11 +39,50 @@ async function loadCharacters(url) {
       characterNameBG.appendChild(characterName);
       card.appendChild(characterNameBG);
 
+      card.onclick = () => {
+        const modal = document.getElementById('modal');
+        modal.style.visibility = 'visible';
+
+        const modalContent = document.getElementById('modal-content');
+        modalContent.innerHTML = '';
+
+        const characterImage = document.createElement('div');
+        characterImage.style.backgroundImage = `url('https://web.archive.org/web/20230325201650if_/https://starwars-visualguide.com/assets/img/characters/${character.url.replace(/\D/g, "")}.jpg')`;
+        characterImage.className = 'character-image';
+
+        const name = document.createElement('span');
+        name.className = 'character-details';
+        name.innerText = `Nome: ${character.name}`;
+
+        const characterHeight = document.createElement('span');
+        characterHeight.className = 'character-details';
+        characterHeight.innerText = `Altura: ${convertHeight(character.height)}`;
+
+        const mass = document.createElement('span');
+        mass.className = 'character-details';
+        mass.innerText = `Peso: ${convertMass(character.mass)}`;
+
+        const eyeColor = document.createElement('span');
+        eyeColor.className = 'character-details';
+        eyeColor.innerText = `Cor dos olhos: ${convertEyeColor(character.eye_color)}`;
+
+        const birthYear = document.createElement("span")
+        birthYear.className = "character-details"
+        birthYear.innerText = `Nascimento: ${convertBirthYear(character.birth_year)}`
+
+        modalContent.appendChild(characterImage)
+        modalContent.appendChild(name)
+        modalContent.appendChild(characterHeight)
+        modalContent.appendChild(mass)
+        modalContent.appendChild(eyeColor)
+        modalContent.appendChild(birthYear)
+        };
+
       mainContent.appendChild(card);
     });
 
     const nextButton = document.getElementById('next-button');
-    const backButton = document.getElementById('back-button')
+    const backButton = document.getElementById('back-button');
 
     nextButton.disabled = !responseJson.next
     backButton.disabled = !responseJson.previous
@@ -58,7 +97,7 @@ async function loadCharacters(url) {
   }
 }
 
-async function loadNextPage(params) {
+async function loadNextPage() {
   if (!currentPageUrl) return;
 
   try {
@@ -73,7 +112,7 @@ async function loadNextPage(params) {
   }
 }
 
-async function loadPreviousPage(params) {
+async function loadPreviousPage() {
   if (!currentPageUrl) return;
 
   try {
@@ -86,4 +125,50 @@ async function loadPreviousPage(params) {
     console.log(error)
     alert ('Erro ao carregar a página anterior')
   }
+}
+
+function hideModal() {
+  const modal = document.getElementById('modal');
+  modal.style.display = 'hidden';
+}
+
+function convertEyeColor(eyeColor) {
+  const cores = {
+    blue: "azul",
+    brown: "castanho",
+    green: "verde",
+    yellow: "amarelo",
+    black: "preto",
+    pink: "rosa",
+    red: "vermelho",
+    orange: "laranja",
+    hazel: "avelã",
+    unknown: "desconhecida"
+  };
+
+  return cores[eyeColor.toLowerCase()] || eyeColor;
+}
+
+function convertHeight(height) {
+  if (height === "unknown") {
+    return "desconhecida";
+  }
+  
+  return (height / 100).toFixed(2);
+}
+
+function convertMass(mass) {
+  if (mass === "unknown") {
+    return "desconhecido";
+  }
+  
+  return `${mass} kg`;
+}
+
+function convertBirthYear(birthYear) {
+  if (birthYear === "unknown") {
+    return "desconhecido";
+  }
+  
+  return birthYear;
 }
